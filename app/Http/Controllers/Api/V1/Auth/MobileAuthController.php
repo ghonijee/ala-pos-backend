@@ -49,47 +49,6 @@ class MobileAuthController extends Controller
     }
 
     /**
-     * @param \App\Models\User $user user data
-     * @param String $deviceName device name from client
-     */
-    private function generateToken($user, $deviceName = null): String
-    {
-        return $user->createToken($deviceName)->plainTextToken;
-    }
-
-    /**
-     * Method for check data validation mobile register
-     * @param \Illuminate\Http\Request $request
-     * @return Illuminate\Support\Facades\Validator
-     */
-    public function validatorRegister(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            "fullname" => "required",
-            "username" => "",
-            "phone" => "required|numeric",
-            "email" => "email",
-            "password" => "required",
-            "device_name" => "required",
-        ], [
-            'required' => 'Data :attribute wajib diisi.',
-            'email' => 'Email tidak valid.',
-            'numeric' => 'Nomer HP tidak valid.',
-            "device_name" => "Nama device tidak valid",
-        ]);
-
-        // Stop when error exist on first failure
-        if ($validator->stopOnFirstFailure()->fails()) {
-            // Retrive error message for response to user
-            $errorMsg = collect($validator->errors()->getMessages())->flatten()->first();
-            // Exception error
-            throw new Exception($errorMsg);
-        }
-
-        return $validator;
-    }
-
-    /**
      * User mobile login can use the username or phone
      * for login apps
      *
@@ -131,6 +90,58 @@ class MobileAuthController extends Controller
         }
     }
 
+    public function checkToken(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            return $this->responseData($user)->responseMessage("Token is valid")->success();
+        } catch (\Throwable $th) {
+            return $this->responseMessage("Token invalid")->failed();
+        }
+    }
+
+    /**
+     * @param \App\Models\User $user user data
+     * @param String $deviceName device name from client
+     */
+    private function generateToken($user, $deviceName = null): String
+    {
+        return $user->createToken($deviceName)->plainTextToken;
+    }
+
+    /**
+     * Method for check data validation mobile register
+     * @param \Illuminate\Http\Request $request
+     * @return Illuminate\Support\Facades\Validator
+     */
+    private function validatorRegister(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "fullname" => "required",
+            "username" => "",
+            "phone" => "required|numeric",
+            "email" => "email",
+            "password" => "required",
+            "device_name" => "required",
+        ], [
+            'required' => 'Data :attribute wajib diisi.',
+            'email' => 'Email tidak valid.',
+            'numeric' => 'Nomer HP tidak valid.',
+            "device_name" => "Nama device tidak valid",
+        ]);
+
+        // Stop when error exist on first failure
+        if ($validator->stopOnFirstFailure()->fails()) {
+            // Retrive error message for response to user
+            $errorMsg = collect($validator->errors()->getMessages())->flatten()->first();
+            // Exception error
+            throw new Exception($errorMsg);
+        }
+
+        return $validator;
+    }
+
     /**
      * Get type username login type
      * Email, Phone, or Username
@@ -153,16 +164,5 @@ class MobileAuthController extends Controller
                 break;
         }
         return $loginType;
-    }
-
-    public function checkToken(Request $request)
-    {
-        try {
-            $user = Auth::user();
-
-            return $this->responseData($user)->responseMessage("Token is valid")->success();
-        } catch (\Throwable $th) {
-            return $this->responseMessage("Token invalid")->failed();
-        }
     }
 }
