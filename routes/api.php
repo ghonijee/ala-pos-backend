@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\MobileAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get("status", function () {
+    return response()->json([
+        "status" => true,
+        "message" => "Rest Full API - Ala POS Active"
+    ]);
+});
+
+Route::group(["prefix" => "v1"], function () {
+    Route::post("mobile/sign-up", [MobileAuthController::class, 'register']);
+    Route::post("mobile/sign-in", [MobileAuthController::class, 'login']);
 });
