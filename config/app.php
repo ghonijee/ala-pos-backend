@@ -2,6 +2,12 @@
 
 return [
 
+    /**
+     * IF true, login action will clear previus token on DB
+     * Force one user to login on one device
+     */
+    'single_login' => env("CLIENT_APP_SINGLE_LOGIN", false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

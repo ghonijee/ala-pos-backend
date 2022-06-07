@@ -24,6 +24,9 @@ class CreateUsersTable extends Migration
             $table->boolean("is_member")->default(false);
             $table->timestamp("expired_date")->nullable();
             $table->char("referal_code", 10)->nullable();
+            $table->string("img_profile_path")->nullable();
+            $table->string("img_profile_url")->nullable();
+            $table->string("device_name")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
