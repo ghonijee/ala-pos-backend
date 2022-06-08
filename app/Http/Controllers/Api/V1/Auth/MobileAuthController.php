@@ -20,7 +20,6 @@ class MobileAuthController extends Controller
      * and user set Login
      *
      * @param \Illuminate\Http\Request $request
-     * @var Validator $validator
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -28,7 +27,7 @@ class MobileAuthController extends Controller
     {
         try {
             DB::beginTransaction();
-            /// @var
+
             $validator = $this->validatorRegister($request);
 
             $store = User::create($validator->validated());
