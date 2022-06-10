@@ -41,4 +41,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'expired_date' => 'datetime',
     ];
+
+    public function stores()
+    {
+        return $this->belongsToMany(Store::class, 'store_users');
+    }
+
+    public function mainStore()
+    {
+        return $this->hasOneThrough(Store::class, StoreUser::class, 'user_id', 'id', 'id', 'store_id');
+    }
 }

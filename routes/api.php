@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\MobileAuthController;
+use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\StoreController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,5 +36,6 @@ Route::prefix("v1")->group(function () {
 
         Route::get("store/main", [StoreController::class, 'userMainStore']);
         Route::apiResource('store', StoreController::class);
+        Route::apiResource('product', ProductController::class);
     });
 });
