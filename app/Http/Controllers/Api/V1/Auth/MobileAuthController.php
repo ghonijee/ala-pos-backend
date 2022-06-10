@@ -40,10 +40,10 @@ class MobileAuthController extends Controller
                 "personal_access_token" => $token,
                 "user" => $store
             ])->success(200);
-        } catch (\Throwable $th) {
+        } catch (Exception $e) {
             DB::rollback();
 
-            return $this->responseMessage($th->getMessage())->failed(500);
+            return $this->responseMessage($e->getMessage())->failed(422);
         }
     }
 

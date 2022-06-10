@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\MobileAuthController;
+use App\Http\Controllers\Api\V1\StoreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,8 @@ Route::prefix("v1")->group(function () {
 
     Route::middleware("auth:sanctum")->group(function () {
         Route::get("mobile/check-token", [MobileAuthController::class, 'checkToken']);
+
+        Route::get("store/main", [StoreController::class, 'userMainStore']);
+        Route::apiResource('store', StoreController::class);
     });
 });
