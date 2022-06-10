@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d4a82231cca6a53d51f4252067c0b34",
+    "content-hash": "57bfead19e404d3a1ea1590b7ae51a3d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -571,6 +571,79 @@
                 }
             ],
             "time": "2022-02-23T14:25:13+00:00"
+        },
+        {
+            "name": "ghonijee/query-adapter",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ghonijee/laravel-query-adapter.git",
+                "reference": "172cd53c605da21955ad98532fed865c0b602afa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ghonijee/laravel-query-adapter/zipball/172cd53c605da21955ad98532fed865c0b602afa",
+                "reference": "172cd53c605da21955ad98532fed865c0b602afa",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "ergebnis/phpstan-rules": "^0.15.3",
+                "larapack/dd": "^1.0",
+                "laravel/framework": "^8.0",
+                "orchestra/testbench": "^6.0",
+                "pestphp/pest": "^1.20.0",
+                "phpstan/phpstan": "^0.12.99",
+                "phpstan/phpstan-strict-rules": "^0.12.11",
+                "phpunit/phpunit": "^9.3",
+                "styleci/cli": "^1.2",
+                "thecodingmachine/phpstan-strict-rules": "^0.12.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "GhoniJee\\DxAdapter\\DxAdapterServiceProvider"
+                    ],
+                    "aliases": {
+                        "QueryAdapter": "GhoniJee\\DxAdapter\\QueryAdapter"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GhoniJee\\DxAdapter\\": "src",
+                    "GhoniJee\\DxAdapter\\Models\\": "Models",
+                    "GhoniJee\\DxAdapter\\Database\\Factories\\": "Database/Factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ghoni Jee",
+                    "email": "akughoni@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Query builder for Laravel model, specifically for DevExtream Table",
+            "homepage": "https://github.com/ghonijee/query-adapter",
+            "keywords": [
+                "ghoni-jee",
+                "query",
+                "query-adapter",
+                "query-builder"
+            ],
+            "support": {
+                "issues": "https://github.com/ghonijee/laravel-query-adapter/issues",
+                "source": "https://github.com/ghonijee/laravel-query-adapter/tree/v1.0.7"
+            },
+            "time": "2022-02-03T03:51:26+00:00"
         },
         {
             "name": "graham-campbell/result-type",
