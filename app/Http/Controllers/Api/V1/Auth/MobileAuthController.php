@@ -7,10 +7,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Validation\Validator as Validation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Expr\Cast\String_;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class MobileAuthController extends Controller
 {
@@ -27,6 +29,12 @@ class MobileAuthController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            if (!$request->has('fullname')) {
+                $request->merge([
+                    "fullname" => $request->username
+                ]);
+            }
 
             $validator = $this->validatorRegister($request);
 
@@ -75,6 +83,7 @@ class MobileAuthController extends Controller
                 throw new Exception("Password salah, coba lagi!");
             }
 
+            // Permission single login check by config env
             if (config("app.single_login")) {
                 // Clear all token on DB
                 $user->tokens()->delete();
@@ -84,8 +93,10 @@ class MobileAuthController extends Controller
                 "personal_access_token" => $this->generateToken($user, $request->device_name),
                 "user" => $user
             ])->success(200);
-        } catch (\Throwable $th) {
-            return $this->responseMessage($th->getMessage())->failed(402);
+        } catch (ValidationException $th) {
+            return $this->responseMessage($th->getMessage())->failed(422);
+        } catch (Exception $th) {
+            return $this->responseMessage($th->getMessage())->failed(401);
         }
     }
 
@@ -97,6 +108,16 @@ class MobileAuthController extends Controller
             return $this->responseData($user)->responseMessage("Token is valid")->success();
         } catch (\Throwable $th) {
             return $this->responseMessage("Token invalid")->failed();
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return $this->responseMessage("Logout success")->success();
+        } catch (\Throwable $th) {
+            return $this->responseMessage($th->getMessage())->failed();
         }
     }
 
@@ -112,13 +133,13 @@ class MobileAuthController extends Controller
     /**
      * Method for check data validation mobile register
      * @param \Illuminate\Http\Request $request
-     * @return Illuminate\Support\Facades\Validator
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    private function validatorRegister(Request $request)
+    private function validatorRegister(Request $request): Validation
     {
         $validator = Validator::make($request->all(), [
-            "fullname" => "required",
-            "username" => "",
+            "fullname" => "",
+            "username" => "required",
             "phone" => "required|numeric",
             "email" => "email",
             "password" => "required",
@@ -131,7 +152,7 @@ class MobileAuthController extends Controller
         ]);
 
         // Stop when error exist on first failure
-        if ($validator->stopOnFirstFailure()->fails()) {
+        if ($validator->fails()) {
             // Retrive error message for response to user
             $errorMsg = collect($validator->errors()->getMessages())->flatten()->first();
             // Exception error
