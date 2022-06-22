@@ -1,5 +1,9 @@
 <?php
 
+use Laravel\Sanctum\Sanctum;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -12,7 +16,7 @@
 */
 
 uses(Tests\TestCase::class)->in('Feature');
-
+uses(RefreshDatabase::class)->in("Feature");
 /*
 |--------------------------------------------------------------------------
 | Expectations
@@ -24,8 +28,24 @@ uses(Tests\TestCase::class)->in('Feature');
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
+expect()->extend('toBeFailed', function () {
+    $responseOriginial = $this->value;
+    $this->value = $responseOriginial->getContent();
+
+    $this->toBeJson();
+    $this->value = $responseOriginial->getData();
+
+    return $this->value->status == false;
+});
+
+expect()->extend('toBeSuccess', function () {
+    $responseOriginial = $this->value;
+    $this->value = $responseOriginial->getContent();
+
+    $this->toBeJson();
+    $this->value = $responseOriginial->getData();
+
+    return $this->value->status == true;
 });
 
 /*
@@ -39,7 +59,11 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function actingAs($user, string $driver = null)
 {
-    // ..
+    return Sanctum::actingAs(
+        $user,
+        ['*']
+    );
+    // return test()->actingAs($user, $driver);
 }

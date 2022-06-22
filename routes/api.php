@@ -32,6 +32,7 @@ Route::prefix("v1")->group(function () {
     Route::post("mobile/sign-in", [MobileAuthController::class, 'login']);
 
     Route::middleware("auth:sanctum")->group(function () {
+        Route::get("mobile/logout", [MobileAuthController::class, 'logout']);
         Route::get("mobile/check-token", [MobileAuthController::class, 'checkToken']);
 
         Route::get("store/main", [StoreController::class, 'userMainStore']);
