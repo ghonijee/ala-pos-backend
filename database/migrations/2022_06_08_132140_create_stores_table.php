@@ -22,7 +22,7 @@ class CreateStoresTable extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->text("adsress")->nullable();
+            $table->text("address")->nullable();
             $table->string("phone")->nullable();
             $table->string("image_url")->nullable();
             $table->string("image_path")->nullable();

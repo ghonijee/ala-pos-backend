@@ -12,14 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class StoreController extends Controller
 {
-    private $rules = [
-        "name" => "required",
-        "phone" => "",
-        "address" => "",
-        "image_url" => "",
-        "image_path" => "",
-    ];
-
     public function index(Request $request)
     {
         $data = QueryAdapter::for(Store::class, $request);
