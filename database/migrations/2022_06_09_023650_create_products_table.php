@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('store_id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->integer('price')->default(0);
             $table->integer('reduce_price')->nullable();
             $table->string('code')->nullable();
