@@ -16,7 +16,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $data = QueryAdapter::for(Product::class, $request)->paginate($request->take ?? 10);
-
         return $this->responseData($data->items())
             ->success();
     }

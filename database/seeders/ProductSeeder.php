@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Store;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 
@@ -15,6 +16,10 @@ class ProductSeeder extends Seeder
     public function run()
     {
         // Create Product Factory
-        Product::factory()->count(100)->create();
+        $products = Product::factory()->count(100)->make();
+        $store = Store::where('name', 'Ala Store')->first();
+        $store->products()->saveMany(
+            $products
+        );
     }
 }
