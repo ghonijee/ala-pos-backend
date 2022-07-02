@@ -89,7 +89,7 @@ class MobileAuthController extends Controller
                 $user->tokens()->delete();
             }
 
-            return $this->responseMessage("Register success")->responseData([
+            return $this->responseMessage("Login success")->responseData([
                 "personal_access_token" => $this->generateToken($user, $request->device_name),
                 "user" => $user
             ])->success(200);
