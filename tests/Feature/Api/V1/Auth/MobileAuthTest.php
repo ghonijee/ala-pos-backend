@@ -1,20 +1,24 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
-test("User can't register with invalid data", function () {
+test("User can't register with invalid data", function ($fullname, $username, $phone, $password) {
     $data = [
-        "fullname" => "Ahmad Yunus Afghoni",
-        "username" => "yunus",
-        "phone" => "nomer_hp",
-        "password" => "password"
+        "fullname" => $fullname,
+        "username" => $username,
+        "phone" => $phone,
+        "password" => $password
     ];
     $response = $this->post('api/v1/mobile/sign-up', $data);
 
     $response->assertStatus(422);
     expect($response)->toBeFailed();
-});
+})->with([
+    ["Ahmad", "yunus", "nomer_hp", "password"],
+    ["Ahmad", "yunus2", "081510897752", ""],
+    ["Ahmad", "", "081510897752", "password"],
+    ["Ahmad", "yunus", "081510897752", "password"],
+]);
 
 test("User can register without fullname", function () {
     $data = [
@@ -33,27 +37,38 @@ test("User can register without fullname", function () {
     expect($user->fullname)->toEqual("yunus2");
 });
 
-test("User can't login with invalid request data", function () {
+test("User can't login with invalid request data", function ($username, $password, $device) {
     $data = [
-        "username" => "yunus",
+        "username" => $username,
+        "password" => $password,
+        "device_name" => $device,
     ];
 
     $response = $this->post('api/v1/mobile/sign-in', $data);
     $response->assertStatus(422);
     expect($response)->toBeFailed();
-});
+})->with([
+    ["yunus", "", null],
+    ["yunus", "password", null],
+    ["", "password", "mobile"]
+]);
 
-test("User can't login with incorrect credentials", function () {
+test("User can't login with incorrect credentials", function ($username, $password, $device) {
     $data = [
-        "username" => "yunus",
-        "password" => "password1",
-        "device_name" => "pest",
+        "username" => $username,
+        "password" => $password,
+        "device_name" => $device,
     ];
 
     $response = $this->post('api/v1/mobile/sign-in', $data);
     $response->assertStatus(401);
     expect($response)->toBeFailed();
-});
+})->with([
+    ["yunus", "password1", "pest"],
+    ["yunus1", "password", "wrong"],
+    ["password", "pest", "mobile"]
+]);
+
 
 test("User can login with correct credentials", function () {
     $store = User::create([
