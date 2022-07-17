@@ -20,9 +20,6 @@ class ProductController extends Controller
             ->success();
     }
 
-    /**
-     * @var \App\Models\User $user
-     */
     public function store(ProductRequest $request)
     {
         try {

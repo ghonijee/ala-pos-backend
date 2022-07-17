@@ -27,7 +27,7 @@ Route::get("status", function () {
     ]);
 });
 
-Route::prefix("v1")->group(function () {
+Route::prefix("v1")->name("v1.")->group(function () {
     Route::post("mobile/sign-up", [MobileAuthController::class, 'register']);
     Route::post("mobile/sign-in", [MobileAuthController::class, 'login']);
 

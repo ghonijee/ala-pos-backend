@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Validation\Validator as Validation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Expr\Cast\String_;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -111,6 +110,9 @@ class MobileAuthController extends Controller
         }
     }
 
+    /**
+     * Auth logout user, this request will delete token on Database
+     */
     public function logout(Request $request)
     {
         try {
@@ -122,6 +124,8 @@ class MobileAuthController extends Controller
     }
 
     /**
+     * Generate token from Sanctum for user login
+     *
      * @param \App\Models\User $user user data
      * @param String $deviceName device name from client
      */
@@ -132,6 +136,7 @@ class MobileAuthController extends Controller
 
     /**
      * Method for check data validation mobile register
+     *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
