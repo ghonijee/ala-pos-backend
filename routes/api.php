@@ -35,7 +35,7 @@ Route::prefix("v1")->name("v1.")->group(function () {
         Route::get("mobile/logout", [MobileAuthController::class, 'logout']);
         Route::get("mobile/check-token", [MobileAuthController::class, 'checkToken']);
 
-        Route::get("store/main", [StoreController::class, 'userMainStore']);
+        Route::get("store/main", [StoreController::class, 'userMainStore'])->name('store.main');
         Route::apiResource('store', StoreController::class);
         Route::apiResource('product', ProductController::class);
     });

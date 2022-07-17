@@ -14,7 +14,7 @@ beforeEach(function () {
 it("Can get list product by store with paginate", function ($take) {
     Store::factory()->hasProducts(100)->create();
 
-    $response = $this->getJson(route("product.index") . "?take=$take");
+    $response = $this->getJson(route("v1.product.index") . "?take=$take");
 
     $response->assertStatus(200);
     $body = $response->getData();
@@ -26,7 +26,7 @@ it("Can store new product to store", function () {
     Store::factory()->create();
     $data = Product::factory()->make();
 
-    $response = $this->postJson(route("product.store"), $data->toArray());
+    $response = $this->postJson(route("v1.product.store"), $data->toArray());
 
     $response->assertStatus(200);
     $body = $response->getData();
@@ -37,7 +37,7 @@ it("Can show product by ID", function () {
     Store::factory()->create();
     $data = Product::factory()->create();
 
-    $response = $this->getJson(route("product.show", ['product' => $data->id]));
+    $response = $this->getJson(route("v1.product.show", ['product' => $data->id]));
 
     $response->assertStatus(200);
 
@@ -54,7 +54,7 @@ it("Can update product by ID", function () {
     // Update Name
     $data->name = "Change Name";
 
-    $response = $this->putJson(route("product.show", ['product' => $data->id]), $data->toArray());
+    $response = $this->putJson(route("v1.product.show", ['product' => $data->id]), $data->toArray());
 
     $response->assertStatus(200);
     $body = $response->getData();
@@ -66,7 +66,7 @@ it("Can delete product by ID", function () {
     Store::factory()->create();
     $data = Product::factory()->create();
 
-    $response = $this->deleteJson(route("product.show", ['product' => $data->id]));
+    $response = $this->deleteJson(route("v1.product.show", ['product' => $data->id]));
 
     $response->assertStatus(200);
     $body = $response->getData();

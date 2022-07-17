@@ -14,9 +14,8 @@ class StoreController extends Controller
 {
     public function index(Request $request)
     {
-        $data = QueryAdapter::for(Store::class, $request);
-
-        return $this->responseData($data->paginate($request->take))
+        $data = QueryAdapter::for(Store::class, $request)->paginate($request->take ?? 10);
+        return $this->responseData($data->items())
             ->success();
     }
 

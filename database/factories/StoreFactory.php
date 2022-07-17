@@ -14,11 +14,12 @@ class StoreFactory extends Factory
     public function definition()
     {
         return [
-            "id" => random_int(1, 100),
+            // "id" => random_int(1, 100),
             "name" => $this->faker->company,
             "phone" => $this->faker->phoneNumber,
             "address" => $this->faker->address,
-            // "image_url" =>
+            "image_url" => null,
+            "image_path" => null,
         ];
     }
 }
