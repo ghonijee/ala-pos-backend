@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 
-uses()->group('actions');
+uses()->group('actions', 'actions.transaction');
 
 it("Can create new transaction Item", function () {
     $item = TransactionItem::factory()

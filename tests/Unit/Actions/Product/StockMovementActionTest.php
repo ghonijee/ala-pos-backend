@@ -4,7 +4,7 @@ use App\Actions\Products\StockMovementAction;
 use App\Models\Product;
 use App\Models\Store;
 
-uses()->group('actions');
+uses()->group('actions', 'actions.product');
 
 it("Stock product can increase", function ($value) {
     $product = Product::factory()->for(Store::factory()->create())->create();

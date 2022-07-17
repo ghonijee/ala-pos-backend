@@ -2,6 +2,8 @@
 
 use App\Models\User;
 
+uses()->group('api', 'api.auth');
+
 test("User can't register with invalid data", function ($fullname, $username, $phone, $password) {
     $data = [
         "fullname" => $fullname,

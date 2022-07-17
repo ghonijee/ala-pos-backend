@@ -5,7 +5,9 @@ use App\Models\Store;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+
+uses()->group('api', 'api.transaction');
+
 
 beforeEach(function () {
     $user = User::factory()->create();

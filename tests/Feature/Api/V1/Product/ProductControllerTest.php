@@ -3,7 +3,9 @@
 use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
-use Illuminate\Support\Arr;
+
+uses()->group('api', 'api.product');
+
 
 beforeEach(function () {
     $user = User::factory()->make();

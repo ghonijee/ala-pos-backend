@@ -1,10 +1,11 @@
 <?php
 
-use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+
+uses()->group('api', 'api.store');
+
 
 beforeEach(function () {
     $user = User::factory()->create();
