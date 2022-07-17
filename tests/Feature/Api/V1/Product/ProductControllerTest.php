@@ -23,8 +23,8 @@ it("Can get list product by store with paginate", function ($take) {
 })->with([10, 15, 20]);
 
 it("Can store new product to store", function () {
-    Store::factory()->create();
-    $data = Product::factory()->make();
+
+    $data = Product::factory()->for(Store::factory()->create())->make();
 
     $response = $this->postJson(route("v1.product.store"), $data->toArray());
 
@@ -34,8 +34,8 @@ it("Can store new product to store", function () {
 });
 
 it("Can show product by ID", function () {
-    Store::factory()->create();
-    $data = Product::factory()->create();
+
+    $data = Product::factory()->for(Store::factory()->create())->create();
 
     $response = $this->getJson(route("v1.product.show", ['product' => $data->id]));
 
@@ -48,8 +48,8 @@ it("Can show product by ID", function () {
 });
 
 it("Can update product by ID", function () {
-    Store::factory()->create();
-    $data = Product::factory()->create();
+    $data = Product::factory()->for(Store::factory()->create())->create();
+
 
     // Update Name
     $data->name = "Change Name";
@@ -63,8 +63,7 @@ it("Can update product by ID", function () {
 });
 
 it("Can delete product by ID", function () {
-    Store::factory()->create();
-    $data = Product::factory()->create();
+    $data = Product::factory()->for(Store::factory()->create())->create();
 
     $response = $this->deleteJson(route("v1.product.show", ['product' => $data->id]));
 

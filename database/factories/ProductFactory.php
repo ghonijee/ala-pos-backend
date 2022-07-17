@@ -16,12 +16,12 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
-        $this->store = Store::all('id')->pluck('id');
+        // $this->store = Store::all('id')->pluck('id');
 
         $price = collect([1000, 2000, 4000, 5000, 8000, 10000, 21000, 35000, 50000, 120000])->random();
         $cost = $price - 500;
         return [
-            "store_id" => $this->store->random(),
+            // "store_id" => $this->store->random(),
             "name" => $this->faker->sentence(2),
             "description" => $this->faker->realText(50),
             "is_active" => 1,

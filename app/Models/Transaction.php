@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function products()
+    {
+        return $this->hasMany(TransactionItem::class, 'transaction_id', 'id');
+    }
 }
