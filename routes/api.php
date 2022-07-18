@@ -41,6 +41,7 @@ Route::prefix("v1")->name("v1.")->group(function () {
         Route::apiResource('product', ProductController::class);
 
         // Transaction
-        Route::post('transaction', [TransactionController::class, 'store'])->name('transaction.store');
+        Route::apiResource('transaction', TransactionController::class)->only(['index', 'store']);
+        // Route::post('transaction', [TransactionController::class, 'store'])->name('transaction.store');
     });
 });

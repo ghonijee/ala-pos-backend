@@ -2,32 +2,34 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use GhoniJee\DxAdapter\QueryAdapter;
 use App\Actions\Transactions\CreateTransaction;
 use App\Actions\Transactions\CreateTransactionItem;
 
 class TransactionController extends Controller
 {
+    public function index(Request $request)
+    {
+        $data = QueryAdapter::for(Transaction::class, $request)->with('products')->paginate($request->take ?? 10);
+        // dd($data->items();
+        return $this->responseData($data->items())
+            ->success();
+    }
+
     public function store(Request $request, CreateTransaction $createTransaction, CreateTransactionItem $createTransactionItem)
     {
         try {
             DB::beginTransaction();
 
-            /**
-             * Step by Step :
-             * 1. get Data User Login | Done from mobile
-             * 2. Create transaction | done
-             * 3. Create Transaction Item | done
-             * 4. increase stock for each product out | done
-             */
             // Create Transaction
             $transactionModel = $createTransaction->execute($request->all())
                 ->createItems($createTransactionItem)
                 ->getTransaction();
 
-            // dd($transactionModel);
             DB::commit();
 
             return $this->responseMessage("Store data success")
