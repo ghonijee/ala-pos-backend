@@ -38,9 +38,12 @@ Route::prefix("v1")->name("v1.")->group(function () {
 
         Route::get("store/main", [StoreController::class, 'userMainStore'])->name('store.main');
         Route::apiResource('store', StoreController::class);
+
+        Route::get('product/find/{code}', [ProductController::class, 'findCode'])->name('product.code');
         Route::apiResource('product', ProductController::class);
 
         // Transaction
+        Route::get('transaction/list/group-date', [TransactionController::class, 'listGroup'])->name('transaction.list.group');
         Route::apiResource('transaction', TransactionController::class)->only(['index', 'store']);
         // Route::post('transaction', [TransactionController::class, 'store'])->name('transaction.store');
     });

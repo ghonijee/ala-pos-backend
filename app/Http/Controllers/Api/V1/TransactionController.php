@@ -15,9 +15,19 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $data = QueryAdapter::for(Transaction::class, $request)->with('products')->paginate($request->take ?? 10);
-        // dd($data->items();
         return $this->responseData($data->items())
             ->success();
+    }
+
+    public function listGroup(Request $request)
+    {
+        try {
+            $data = QueryAdapter::for(Transaction::class, $request)->get();
+            return $this->responseData($data)
+                ->success();
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
     }
 
     public function store(Request $request, CreateTransaction $createTransaction, CreateTransactionItem $createTransactionItem)

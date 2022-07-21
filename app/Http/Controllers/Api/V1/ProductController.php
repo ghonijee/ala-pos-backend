@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use Exception;
 use GhoniJee\DxAdapter\QueryAdapter;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,6 +46,23 @@ class ProductController extends Controller
     {
         try {
             $store = Product::find($id);
+
+            return $this->responseMessage("show store")
+                ->responseData($store)
+                ->success();
+        } catch (\Throwable $th) {
+            return $this->responseMessage($th->getMessage())->failed();
+        }
+    }
+
+    public function findCode(Request $request, $code)
+    {
+        try {
+            $store = Product::where('code', $code)->first();
+
+            if ($store == null) {
+                throw new Exception("product not found");
+            }
 
             return $this->responseMessage("show store")
                 ->responseData($store)

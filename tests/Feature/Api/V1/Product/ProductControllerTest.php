@@ -49,6 +49,20 @@ it("Can show product by ID", function () {
     expect($response)->toBeSuccess();
 });
 
+it("Can show product by Code", function () {
+
+    $data = Product::factory()->for(Store::factory()->create())->create();
+
+    $response = $this->getJson(route("v1.product.code", ['code' => $data->code]));
+
+    $response->assertStatus(200);
+
+    $body = $response->getData();
+
+    expect($response)->toBeSuccess();
+    expect((array) $body->data)->toEqual($data->toArray());
+});
+
 it("Can update product by ID", function () {
     $data = Product::factory()->for(Store::factory()->create())->create();
 
