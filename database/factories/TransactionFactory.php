@@ -16,7 +16,7 @@ class TransactionFactory extends Factory
     public function definition()
     {
         return [
-            "key" => Uuid::uuid4(),
+            "key" => $this->faker->uuid(),
             "user_id" => 1,
             "store_id" => 1,
             "date" => date('Y-m-d'),

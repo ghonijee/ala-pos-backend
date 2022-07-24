@@ -12,7 +12,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /**
-     * @var Array|Null $data for send to response JSON
+     * @var Array|null $data for send to response JSON
      */
     protected $data = null;
 

@@ -29,8 +29,8 @@ it("Can create transaction", function () {
 
     $response = $this->postJson(route('v1.transaction.store'), $data);
     $transaction = Transaction::where('key', $data['key'])->first();
-    $transactionItems = $transaction->products;
     $response->assertStatus(200);
+    $transactionItems = $transaction->products;
     expect($response)->toBeSuccess();
     expect($transaction)->key->toEqual($data['key']);
     expect($transactionItems->count())->toEqual(collect($dataItems)->count());

@@ -16,5 +16,6 @@ class InitialTesterData extends Seeder
         $this->call(UserSeeder::class);
         $this->call(StoreSeeder::class);
         $this->call(ProductSeeder::class);
+        $this->call(TransactionSeeder::class);
     }
 }

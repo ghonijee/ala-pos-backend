@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Transactions\CreateInvoiceNumber;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,10 +31,18 @@ class TransactionController extends Controller
         }
     }
 
-    public function store(Request $request, CreateTransaction $createTransaction, CreateTransactionItem $createTransactionItem)
+    public function store(Request $request, CreateInvoiceNumber $createInvoiceNumber, CreateTransaction $createTransaction, CreateTransactionItem $createTransactionItem)
     {
         try {
             DB::beginTransaction();
+
+            // Generate invoice number
+            $invoiceNumber = $createInvoiceNumber->setup(Transaction::query(), $request->store_id);
+            // Merge on request data
+            $request->merge([
+                "invoice_number" => $invoiceNumber->generateNumber(),
+                "sequence_number" => $invoiceNumber->nextSequence()
+            ]);
 
             // Create Transaction
             $transactionModel = $createTransaction->execute($request->all())
