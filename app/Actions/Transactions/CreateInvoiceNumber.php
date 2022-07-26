@@ -26,7 +26,7 @@ class CreateInvoiceNumber
     private function lastSequenceToday(): void
     {
 
-        $last = $this->model->where("store_id", $this->store_id)->orderBy("sequence_number", "DESC")->first('sequence_number');
+        $last = $this->model->where("date", now()->format('Y-m-d'))->where("store_id", $this->store_id)->orderBy("sequence_number", "DESC")->first('sequence_number');
 
         $this->lastSequence = $last == null ? 0 : $last->sequence_number;
     }

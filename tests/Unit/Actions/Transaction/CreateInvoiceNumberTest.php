@@ -40,3 +40,36 @@ it("Can generate next sequence number invoice", function () {
     expect($class->generateNumber())->toEqual($stringExpect);
     expect($class->nextSequence())->toEqual(6);
 })->group("actions.transaction.invoiceNumber");
+
+it("Can generate new sequence number invoice today", function () {
+    $today = now()->subDay()->format('Y-m-d');
+    $seq = 0;
+    $data = Transaction::factory()
+        ->count(5)
+        ->state(
+            new Sequence(
+                ["sequence_number" => 1],
+                ["sequence_number" => 2],
+                ["sequence_number" => 3],
+                ["sequence_number" => 4],
+                ["sequence_number" => 5],
+            )
+        )
+        ->has(TransactionItem::factory()
+            ->count(5)
+            ->for(
+                Product::factory()
+                    ->for(Store::factory()->create())
+                    ->create()
+            ), 'products')
+        ->create(['date' => $today]);
+
+    $class = new CreateInvoiceNumber();
+    // $this->travel(1)->day;
+    $class = $class->setup(Transaction::query(), 1);
+
+    $stringExpect = "TR" . now()->format("Ymd") . "-0001";
+
+    expect($class->generateNumber())->toEqual($stringExpect);
+    expect($class->nextSequence())->toEqual(1);
+})->group("actions.transaction.invoiceNumber");

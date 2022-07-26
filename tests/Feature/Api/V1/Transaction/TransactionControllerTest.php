@@ -25,7 +25,7 @@ it("Can create transaction", function () {
                 ->create()
         )->make()
         ->toArray();
-    $data['items'] = $dataItems;
+    $data['products'] = $dataItems;
 
     $response = $this->postJson(route('v1.transaction.store'), $data);
     $transaction = Transaction::where('key', $data['key'])->first();

@@ -9,7 +9,7 @@ use App\Models\TransactionItem;
 
 uses()->group('actions', 'actions.transaction');
 
-it("Can create new transaction Item", function () {
+it("Can create new transaction", function () {
     $data = Transaction::factory()->make()->toArray();
     $dataItems = TransactionItem::factory()
         ->count(5)
@@ -18,13 +18,15 @@ it("Can create new transaction Item", function () {
                 ->for(Store::factory()->create())
                 ->create()
         )->make();
-    $data['items'] = $dataItems->toArray();
-
+    $data['products'] = $dataItems->toArray();
     $instance = new CreateTransaction();
     $instance->execute($data);
-    $transaction = Transaction::where('key', $data['key'])->first();
-    expect($transaction)->key->toEqual($data['key']);
-    expect($transaction)->products->toBeEmpty();
     $instance->createItems(new CreateTransactionItem());
+
+    $transaction = Transaction::where('key', $data['key'])->first();
+
+    expect($transaction)->key->toEqual($data['key']);
+    expect($transaction)->products->not()->toBeEmpty();
+    expect($instance->getTransaction())->products->not()->toBeEmpty();
     expect($instance->getTransaction())->products->toHaveCount($dataItems->count());
 });

@@ -2,9 +2,10 @@
 
 namespace App\Actions\Transactions;
 
-use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Transaction;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class CreateTransaction
 {
@@ -18,7 +19,7 @@ class CreateTransaction
     {
         $this->data = collect($data);
 
-        $this->transaction = Transaction::create($this->data->except('items')->toArray());
+        $this->transaction = Transaction::create($this->data->except('products')->toArray());
 
         return $this;
     }
@@ -26,7 +27,7 @@ class CreateTransaction
     public function createItems(CreateTransactionItem $createTransactionItem)
     {
         $this->itemAction = $createTransactionItem;
-        $items = collect($this->data['items']);
+        $items = collect($this->data['products']);
 
         $items->each(function ($item) {
             $this->itemAction->execute($item, $this->transaction);
@@ -37,6 +38,6 @@ class CreateTransaction
 
     public function getTransaction()
     {
-        return $this->transaction;
+        return $this->transaction->load('products');
     }
 }

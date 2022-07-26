@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use GhoniJee\DxAdapter\QueryAdapter;
 use App\Actions\Transactions\CreateTransaction;
 use App\Actions\Transactions\CreateTransactionItem;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -27,7 +28,7 @@ class TransactionController extends Controller
             return $this->responseData($data)
                 ->success();
         } catch (\Throwable $th) {
-            dd($th->getMessage());
+            return $this->responseMessage($th->getMessage() . $th->getTraceAsString())->failed();
         }
     }
 
@@ -51,7 +52,7 @@ class TransactionController extends Controller
 
             DB::commit();
 
-            return $this->responseMessage("Store data success")
+            return $this->responseMessage("Store data success")->responseData($transactionModel)
                 ->success();
         } catch (\Throwable $th) {
             DB::rollBack();
