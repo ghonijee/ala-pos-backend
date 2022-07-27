@@ -11,14 +11,14 @@ class CreateTransactionItem
 {
     public function execute(array $data, Transaction $transaction)
     {
-        // find product on master Data
-        $product = Product::find($data['product_id']);
+        if ($data['product_id']) {
+            // find product on master Data
+            $product = Product::find($data['product_id']);
+            // Update stock
+            StockMovementAction::increase($product, $data['quantity']);
+        }
 
-        // Update stock
-        StockMovementAction::increase($product, $data['quantity']);
-
-        // Store transaction Item;
+        // Store transaction Item
         $transaction->products()->create($data);
-        // $store = TransactionItem::create($data);
     }
 }
