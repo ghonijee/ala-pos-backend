@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Auth\MobileAuthController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\StoreController;
 use App\Http\Controllers\Api\V1\TransactionController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,8 @@ Route::prefix("v1")->name("v1.")->group(function () {
     Route::post("mobile/sign-in", [MobileAuthController::class, 'login']);
 
     Route::middleware("auth:sanctum")->group(function () {
+        Route::apiResource('user', UserController::class)->only('update');
+
         Route::get("mobile/logout", [MobileAuthController::class, 'logout']);
         Route::get("mobile/check-token", [MobileAuthController::class, 'checkToken']);
 
