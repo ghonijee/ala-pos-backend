@@ -36,7 +36,7 @@ Route::prefix("v1")->name("v1.")->group(function () {
     Route::middleware("auth:sanctum")->group(function () {
         Route::post("change-password/{id}", [UserController::class, 'changePassword'])->name("change.password");
 
-        Route::apiResource('user', UserController::class)->only('update');
+        Route::apiResource('user', UserController::class)->only(['update', 'show']);
 
         Route::get("mobile/logout", [MobileAuthController::class, 'logout']);
         Route::get("mobile/check-token", [MobileAuthController::class, 'checkToken']);

@@ -11,6 +11,30 @@ beforeEach(function () {
     actingAs($user);
 });
 
+test("User can show profile data", function () {
+
+    $user = User::factory()->create();
+
+    $response = $this->getJson(route('v1.user.show', ['user' => $user->id]));
+
+    $response->assertStatus(200);
+    $body = $response->getData();
+    expect($body->data)->fullname->toEqual($user->fullname);
+    expect($response)->toBeSuccess();
+});
+
+test("User can't show profile not found", function () {
+
+    $user = User::factory()->create();
+
+    $response = $this->getJson(route('v1.user.show', ['user' => 100]));
+
+    $response->assertStatus(404);
+    $body = $response->getData();
+    expect($body->data)->toBeNull();
+    expect($response)->toBeFailed();
+});
+
 test("User can update profile data", function () {
 
     $user = User::factory()->create();

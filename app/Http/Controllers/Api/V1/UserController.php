@@ -8,10 +8,27 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function show(Request $request, $id)
+    {
+        try {
+            $store = User::findOrFail($id);
+
+            return $this->responseMessage("show user")
+                ->responseData($store)
+                ->success();
+        } catch (ModelNotFoundException $th) {
+            return $this->responseMessage($th->getMessage())->failed(404);
+        } catch (Exception $th) {
+            return $this->responseMessage($th->getMessage())->failed($th->getCode());
+        }
+    }
+
     public function update(UserRequest $request, $id)
     {
         try {
