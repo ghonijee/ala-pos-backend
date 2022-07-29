@@ -28,3 +28,45 @@ test("User can update profile data", function () {
     expect($body->data)->fullname->toEqual($updateData["fullname"]);
     expect($response)->toBeSuccess();
 });
+
+test("User can change password", function () {
+
+    $user = User::factory()->create();
+
+    $data = [
+        "new_password" => "password_new",
+        "old_password" => "password",
+    ];
+    $response = $this->postJson(route('v1.change.password', ['id' => $user->id]), $data);
+
+    $response->assertStatus(200);
+    expect($response)->toBeSuccess();
+});
+
+test("User can't change password becouse old password invalid", function () {
+
+    $user = User::factory()->create();
+
+    $data = [
+        "new_password" => "password_new",
+        "old_password" => "password_valid",
+    ];
+    $response = $this->postJson(route('v1.change.password', ['id' => $user->id]), $data);
+
+    $response->assertStatus(419);
+    expect($response)->toBeFailed();
+});
+
+test("User can't change password becouse user id not found", function () {
+
+    $user = User::factory()->create();
+
+    $data = [
+        "new_password" => "password_new",
+        "old_password" => "password_valid",
+    ];
+    $response = $this->postJson(route('v1.change.password', ['id' => 100]), $data);
+
+    $response->assertStatus(404);
+    expect($response)->toBeFailed();
+});
