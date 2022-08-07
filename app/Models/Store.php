@@ -11,6 +11,10 @@ class Store extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        "use_stock_opname" => 'boolean'
+    ];
+
     public function products()
     {
         return $this->hasMany(Product::class, 'store_id', 'id');
