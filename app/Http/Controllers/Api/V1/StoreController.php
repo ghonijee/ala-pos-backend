@@ -85,7 +85,7 @@ class StoreController extends Controller
 
             DB::commit();
 
-            return $this->responseMessage("Store data success")
+            return $this->responseMessage("Update data berhasil")
                 ->responseData($query->first())
                 ->success();
         } catch (\Throwable $th) {
