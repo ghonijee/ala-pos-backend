@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use GhoniJee\DxAdapter\QueryAdapter;
 use App\Actions\Transactions\CreateTransaction;
 use App\Actions\Transactions\CreateTransactionItem;
+use App\Models\Store;
 use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
@@ -37,8 +38,12 @@ class TransactionController extends Controller
         try {
             DB::beginTransaction();
 
+            // Find Store
+            $store = Store::findOrFail($request->store_id);
+
             // Generate invoice number
             $invoiceNumber = $createInvoiceNumber->setup(Transaction::query(), $request->store_id);
+
             // Merge on request data
             $request->merge([
                 "invoice_number" => $invoiceNumber->generateNumber(),
@@ -47,7 +52,7 @@ class TransactionController extends Controller
 
             // Create Transaction
             $transactionModel = $createTransaction->execute($request->all())
-                ->createItems($createTransactionItem)
+                ->createItems($createTransactionItem, $store->use_stock_opname)
                 ->getTransaction();
 
             DB::commit();

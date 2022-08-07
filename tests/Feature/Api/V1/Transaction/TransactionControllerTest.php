@@ -16,12 +16,13 @@ beforeEach(function () {
 });
 
 it("Can create transaction", function () {
-    $data = Transaction::factory()->make()->toArray();
+    $store = Store::factory()->create();
+    $data = Transaction::factory()->for($store)->make()->toArray();
     $dataItems = TransactionItem::factory()
         ->count(5)
         ->for(
             Product::factory()
-                ->for(Store::factory()->create())
+                ->for($store)
                 ->create()
         )->make()
         ->toArray();
