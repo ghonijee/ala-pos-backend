@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Constant\UserStatus;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -34,6 +35,10 @@ class MobileAuthController extends Controller
                     "fullname" => $request->username
                 ]);
             }
+
+            $request->merge([
+                "user_status" => UserStatus::FREE,
+            ]);
 
             $validator = $this->validatorRegister($request);
 
@@ -144,6 +149,7 @@ class MobileAuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "fullname" => "",
+            "user_status" => "",
             "username" => "required",
             "phone" => "required|numeric",
             "email" => "email",
