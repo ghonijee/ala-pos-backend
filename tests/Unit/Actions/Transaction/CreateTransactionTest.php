@@ -30,3 +30,58 @@ it("Can create new transaction", function () {
     expect($instance->getTransaction())->products->not()->toBeEmpty();
     expect($instance->getTransaction())->products->toHaveCount($dataItems->count());
 });
+
+test("Product stock not changed when store not use stock opname feature", function () {
+    $data = Transaction::factory()->make()->toArray();
+    $productsList =  Product::factory()
+        ->for(Store::factory()->state(["use_stock_opname" => false])->create())
+        ->create();
+    $dataItems = TransactionItem::factory()
+        ->count(5)
+        ->for(
+            $productsList
+        )->make();
+    $data['products'] = $dataItems->toArray();
+    $productExpectedOld = Product::first();
+
+    $instance = new CreateTransaction();
+    $instance->execute($data);
+    $instance->createItems(new CreateTransactionItem(), false);
+
+    $transaction = Transaction::where('key', $data['key'])->first();
+
+    $productExpectedNew = Product::first();
+    expect($productExpectedOld->stock)->toEqual($productExpectedNew->stock);
+
+    expect($transaction)->key->toEqual($data['key']);
+    expect($transaction)->products->not()->toBeEmpty();
+    expect($instance->getTransaction())->products->not()->toBeEmpty();
+    expect($instance->getTransaction())->products->toHaveCount($dataItems->count());
+});
+
+test("Product stock changed when store use stock opname feature", function () {
+    $data = Transaction::factory()->make()->toArray();
+    $productsList =  Product::factory()
+        ->for(Store::factory()->state(["use_stock_opname" => false])->create())
+        ->create();
+    $dataItems = TransactionItem::factory()
+        ->count(5)
+        ->for(
+            $productsList
+        )->make();
+    $data['products'] = $dataItems->toArray();
+
+    $instance = new CreateTransaction();
+    $instance->execute($data);
+    $instance->createItems(new CreateTransactionItem(), true);
+
+    $transaction = Transaction::where('key', $data['key'])->first();
+
+    $productExpectedNew = Product::first();
+    expect($productsList->stock)->not()->toEqual($productExpectedNew->stock);
+
+    expect($transaction)->key->toEqual($data['key']);
+    expect($transaction)->products->not()->toBeEmpty();
+    expect($instance->getTransaction())->products->not()->toBeEmpty();
+    expect($instance->getTransaction())->products->toHaveCount($dataItems->count());
+});

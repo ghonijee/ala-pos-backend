@@ -2,6 +2,7 @@
 
 namespace App\Actions\Transactions;
 
+use App\Models\Store;
 use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Support\Collection;
@@ -24,13 +25,13 @@ class CreateTransaction
         return $this;
     }
 
-    public function createItems(CreateTransactionItem $createTransactionItem)
+    public function createItems(CreateTransactionItem $createTransactionItem, bool $useStockOpname = true)
     {
         $this->itemAction = $createTransactionItem;
         $items = collect($this->data['products']);
 
-        $items->each(function ($item) {
-            $this->itemAction->execute($item, $this->transaction);
+        $items->each(function ($item) use ($useStockOpname) {
+            $this->itemAction->execute($item, $this->transaction, $useStockOpname);
         });
 
         return $this;

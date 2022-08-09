@@ -9,13 +9,15 @@ use App\Models\Transaction;
 
 class CreateTransactionItem
 {
-    public function execute(array $data, Transaction $transaction)
+    public function execute(array $data, Transaction $transaction, $useStockOptname = true)
     {
         if ($data['product_id']) {
             // find product on master Data
             $product = Product::find($data['product_id']);
-            // Update stock
-            StockMovementAction::increase($product, $data['quantity']);
+            // Update stock and store use stock opname
+            if ($useStockOptname) {
+                StockMovementAction::increase($product, $data['quantity']);
+            }
         }
 
         // Store transaction Item

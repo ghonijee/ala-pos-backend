@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Constant\UserStatus;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
 
 class UserFactory extends Factory
 {
@@ -15,11 +17,21 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $isMember = $this->faker->boolean;
+        $userStatus = UserStatus::FREE;
+        $expiredDate = null;
+        if ($isMember) {
+            $userStatus = UserStatus::PRO;
+            $expiredDate = now()->addYear();
+        }
         return [
             'fullname' => $this->faker->name(),
             'username' => $this->faker->userName(),
             'email' => $this->faker->unique()->safeEmail(),
             "phone" => $this->faker->phoneNumber(),
+            "user_status" => $userStatus,
+            "is_member" => $isMember,
+            "expired_date" => $expiredDate,
             'password' => "password", // password
         ];
     }

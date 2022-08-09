@@ -15,7 +15,7 @@ class ChangeNullableTransactionItemsTable extends Migration
     {
         Schema::table('transaction_items', function (Blueprint $table) {
             $table->bigInteger('store_id')->nullable()->change();
-            $table->unsignedBigInteger('product_id')->nullable()->change();
+            $table->bigInteger('product_id')->nullable()->change();
         });
     }
 
