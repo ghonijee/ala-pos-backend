@@ -18,14 +18,6 @@ jobs:
         WITH_V: true
         INITIAL_VERSION: 1.0.1
         DEFAULT_BUMP: "#patch"
-        RELEASE_BRANCHES: "production"
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create GitHub release
-        uses: Roang-zero1/github-create-release-action@v2
-        with:
-          version_regex: ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_BRANCHES: "development"
+        PRERELEASE_SUFFIX: null
 
