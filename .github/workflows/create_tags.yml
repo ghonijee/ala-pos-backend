@@ -18,6 +18,6 @@ jobs:
         WITH_V: true
         INITIAL_VERSION: 1.0.1
         DEFAULT_BUMP: "#patch"
-        RELEASE_BRANCHES: "development"
+        RELEASE_BRANCHES: "production"
         PRERELEASE_SUFFIX: null
 
