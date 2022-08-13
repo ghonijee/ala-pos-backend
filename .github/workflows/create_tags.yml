@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - production
+  pull_request:
+    types:
+      - closed
+    branches:
+      - production
 jobs:
   build:
     runs-on: ubuntu-latest
