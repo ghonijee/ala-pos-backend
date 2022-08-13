@@ -1,13 +1,10 @@
 name: Create Tag
 on:
-  push:
+  pull_request:
     branches:
       - production
-  pull_request:
     types:
       - closed
-    branches:
-      - production
 jobs:
   build:
     runs-on: ubuntu-latest
