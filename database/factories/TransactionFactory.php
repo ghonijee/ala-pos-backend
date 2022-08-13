@@ -19,6 +19,8 @@ class TransactionFactory extends Factory
             "key" => $this->faker->uuid(),
             "user_id" => 1,
             "store_id" => 1,
+            "customer_name" => $this->faker->name,
+            "customer_id" => null,
             "date" => date('Y-m-d'),
             "discount" => 0,
             "note" => $this->faker->sentence,
