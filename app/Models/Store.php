@@ -19,4 +19,9 @@ class Store extends Model
     {
         return $this->hasMany(Product::class, 'store_id', 'id');
     }
+
+    public function roles()
+    {
+        return $this->hasMany(Role::class, 'store_id', 'id');
+    }
 }
