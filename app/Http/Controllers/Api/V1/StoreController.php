@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Users\SetupRolePermission;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreRequest;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use GhoniJee\DxAdapter\QueryAdapter;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +35,8 @@ class StoreController extends Controller
             $user = Auth::user();
 
             $store = $user->stores()->create($data);
+
+            SetupRolePermission::fromRegister($user, $store);
 
             DB::commit();
 

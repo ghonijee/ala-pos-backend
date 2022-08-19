@@ -44,8 +44,8 @@ class SetupRolePermission
 
     public function assignmentUserRole($role)
     {
-        $role = $this->store->roles()->where("name", $role);
-        $this->user->roles()->async($role->id);
+        $role = $this->store->roles()->where("name", $role)->first();
+        $this->user->roles()->sync($role->id);
     }
 
     /**
@@ -96,7 +96,7 @@ class SetupRolePermission
     /**
      * Get ID default permission for staff role
      */
-    private function staffDefaultPermission()
+    protected function staffDefaultPermission()
     {
         $permissionKey =  [
             "create-transaction",
@@ -116,16 +116,9 @@ class SetupRolePermission
     /**
      * Get ID default permission for owner role
      */
-    private function ownerDefaultPermission()
+    protected function ownerDefaultPermission()
     {
         $permissionId = Permission::all('id');
         return $permissionId->pluck('id');
     }
 }
-
-/**
- * Step
- * 1. Create Role For Store
- * 2. Assignment New User from register to Owner Role
- * 3. Assigmnet Permission to Role
- */

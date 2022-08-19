@@ -87,7 +87,6 @@ test("User can login with correct credentials", function () {
     ];
 
     $response = $this->post('api/v1/mobile/sign-in', $data);
-
     $response->assertStatus(200);
     expect($response)->toBeSuccess();
 

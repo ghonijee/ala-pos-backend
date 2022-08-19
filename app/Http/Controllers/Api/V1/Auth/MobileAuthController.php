@@ -42,15 +42,15 @@ class MobileAuthController extends Controller
 
             $validator = $this->validatorRegister($request);
 
-            $store = User::create($validator->validated());
+            $user = User::create($validator->validated());
 
-            $token = $this->generateToken($store, $request->device_name);
+            $token = $this->generateToken($user, $request->device_name);
 
             DB::commit();
 
             return $this->responseMessage("Register success")->responseData([
                 "personal_access_token" => $token,
-                "user" => $store
+                "user" => $user
             ])->success(200);
         } catch (Exception $e) {
             DB::rollback();
@@ -77,7 +77,7 @@ class MobileAuthController extends Controller
                 'device_name' => 'required',
             ]);
 
-            $user = User::where($loginField, $request->username)->first();
+            $user = User::where($loginField, $request->username)->with("role")->first();
 
             if (!$user) {
                 throw new Exception("Data user belum tersedia, silahkan daftar terlebih dulu");
@@ -95,7 +95,7 @@ class MobileAuthController extends Controller
 
             return $this->responseMessage("Login success")->responseData([
                 "personal_access_token" => $this->generateToken($user, $request->device_name),
-                "user" => $user
+                "user" => $user,
             ])->success(200);
         } catch (ValidationException $th) {
             return $this->responseMessage($th->getMessage())->failed(422);

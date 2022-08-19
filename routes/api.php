@@ -4,7 +4,8 @@ use App\Http\Controllers\Api\V1\Auth\MobileAuthController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\StoreController;
 use App\Http\Controllers\Api\V1\TransactionController;
-use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\User\RoleController;
+use App\Http\Controllers\Api\V1\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,10 @@ Route::prefix("v1")->name("v1.")->group(function () {
         Route::post("change-password/{id}", [UserController::class, 'changePassword'])->name("change.password");
 
         Route::apiResource('user', UserController::class)->only(['update', 'show']);
+
+        Route::get("role/user/{id}", [RoleController::class, 'userRole'])->name("role.userRole");
+        Route::apiResource("role", RoleController::class);
+
 
         Route::get("mobile/logout", [MobileAuthController::class, 'logout']);
         Route::get("mobile/check-token", [MobileAuthController::class, 'checkToken']);

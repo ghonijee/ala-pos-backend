@@ -1,8 +1,10 @@
 <?php
 
 use App\Actions\Users\SetupRolePermission;
+use App\Constant\UserDefaultRole;
 use App\Models\Permission;
 use App\Models\PermissionRole;
+use App\Models\Role;
 use App\Models\Store;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
@@ -35,6 +37,24 @@ it("can assigmnet permission to default role", function () {
 
     $userStore = Store::find($store->id);
     expect($userStore->roles)->each(function ($role) {
-        expect($role)->permissions->not->toBeEmpty()->dd();
+        expect($role)->permissions->not->toBeEmpty();
     });
+});
+
+test("Can Setup Default role and permission for new user registered", function () {
+    $user = User::factory()->create();
+    $store = Store::factory()->create();
+    SetupRolePermission::fromRegister($user, $store);
+
+    $roleOwner = Role::where("store_id", $store->id)->where("name", UserDefaultRole::OWNER)->first();
+
+    expect($store)->roles->not->toBeEmpty()->toHaveCount(2);
+    expect($store->roles)->each(function ($role) {
+        expect($role)->not->toBeEmpty();
+    });
+    expect($store->roles)->each(function ($role) {
+        expect($role)->permissions->not->toBeEmpty();
+    });
+    expect($user->role)->name->toEqual($roleOwner->name)->id->toEqual($roleOwner->id);
+    expect($user->role)->permissions->toHaveCount(Permission::all()->count());
 });

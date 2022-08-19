@@ -1,7 +1,10 @@
 <?php
 
-use App\Models\Store;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\Store;
+use App\Models\Permission;
+use App\Constant\UserDefaultRole;
 use Illuminate\Support\Facades\Auth;
 
 uses()->group('api', 'api.store');
@@ -27,9 +30,23 @@ it("Can get list store by store with paginate", function ($take) {
 it("Can create new store to tabel", function () {
     $data = Store::factory()->make();
     $data->user_id = Auth::id();
+    $user = Auth::user();
     $response = $this->postJson(route("v1.store.store"), $data->toArray());
 
     $response->assertStatus(200);
+    $store = Store::where("name", $data->name)->first();
+    $roleOwner = Role::where("store_id", $store->id)->where("name", UserDefaultRole::OWNER)->first();
+
+    expect($store)->roles->not->toBeEmpty()->toHaveCount(2);
+    expect($store->roles)->each(function ($role) {
+        expect($role)->not->toBeEmpty();
+    });
+    expect($store->roles)->each(function ($role) {
+        expect($role)->permissions->not->toBeEmpty();
+    });
+    expect($user->role)->name->toEqual($roleOwner->name)->id->toEqual($roleOwner->id);
+    expect($user->role)->permissions->toHaveCount(Permission::all()->count());
+
     $body = $response->getData();
     expect($response)->toBeSuccess();
 });
@@ -60,8 +77,8 @@ it("Can get main store by User Login", function () {
 
     $body = $response->getData();
 
-    expect((array) $body->data)->name->toEqual($data->first()->name);
     expect($response)->toBeSuccess();
+    expect($body->data)->name->toEqual($data->first()->name);
 });
 
 it("Can update store by ID", function () {
