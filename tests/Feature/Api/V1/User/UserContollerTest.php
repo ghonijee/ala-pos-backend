@@ -17,6 +17,20 @@ beforeEach(function () {
     actingAs($user);
 });
 
+test("User can list another user from same store", function () {
+
+    $usersId = User::factory()->count(3)->create()->pluck('id');
+    $store = Store::factory()->create();
+    $store->users()->sync($usersId);
+
+    $response = $this->getJson(route('v1.user.userStaff', ['store' => $store->id]));
+
+    $response->assertStatus(200);
+    $body = $response->getData();
+    expect($body)->data->toHaveCount(3);
+    expect($response)->toBeSuccess();
+});
+
 test("User can show profile data", function () {
 
     $user = User::factory()->create();

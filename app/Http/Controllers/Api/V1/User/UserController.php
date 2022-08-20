@@ -17,8 +17,19 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
-    public function userStaff(Request $request)
+    public function userStaff(Request $request, $store)
     {
+        try {
+            $store = Store::with('users')->findOrFail($store);
+
+            return $this->responseMessage("list user")
+                ->responseData($store->users)
+                ->success();
+        } catch (ModelNotFoundException $th) {
+            return $this->responseMessage($th->getMessage())->failed(404);
+        } catch (Exception $th) {
+            return $this->responseMessage($th->getMessage())->failed($th->getCode());
+        }
     }
     public function show(Request $request, $id)
     {
