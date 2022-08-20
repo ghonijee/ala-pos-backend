@@ -29,8 +29,28 @@ class SetupRolePermission
             $instance->createRole();
             // Assignment Default Permission to Role
             $instance->assigmnetPermission();
+            // Find Owner Role
+            $role = $instance->store->roles()->where("name", UserDefaultRole::OWNER)->first();
             // Assignment Role Owner to new User
-            $instance->assignmentUserRole(UserDefaultRole::OWNER);
+            $instance->assignmentUserRole($role);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    /**
+     * Setup Default User Management access for new User management.
+     * assignment selected role to new user
+     */
+    public static function fromUserManagement(User $user, Store $store, int $roleId)
+    {
+        try {
+            // initial
+            $instance = new self($user, $store);
+            // Find role by ID
+            $role = $instance->store->roles()->where("id", $roleId)->first();
+            // Assignment Role Owner to new User
+            $instance->assignmentUserRole($role);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -44,7 +64,6 @@ class SetupRolePermission
 
     public function assignmentUserRole($role)
     {
-        $role = $this->store->roles()->where("name", $role)->first();
         $this->user->roles()->sync($role->id);
     }
 

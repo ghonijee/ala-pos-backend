@@ -37,7 +37,8 @@ Route::prefix("v1")->name("v1.")->group(function () {
     Route::middleware("auth:sanctum")->group(function () {
         Route::post("change-password/{id}", [UserController::class, 'changePassword'])->name("change.password");
 
-        Route::apiResource('user', UserController::class)->only(['update', 'show']);
+        Route::get("user/staff/{store_id}", [UserController::class, 'userStaff'])->name("role.userStaff");
+        Route::apiResource('user', UserController::class)->only(['update', 'show', 'store']);
 
         Route::get("role/user/{id}", [RoleController::class, 'userRole'])->name("role.userRole");
         Route::apiResource("role", RoleController::class);

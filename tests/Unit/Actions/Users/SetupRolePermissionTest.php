@@ -58,3 +58,28 @@ test("Can Setup Default role and permission for new user registered", function (
     expect($user->role)->name->toEqual($roleOwner->name)->id->toEqual($roleOwner->id);
     expect($user->role)->permissions->toHaveCount(Permission::all()->count());
 });
+
+test("Can Setup Default role and permission for new user management", function () {
+    // Setup default role
+    $store = Store::factory()->create();
+    SetupRolePermission::fromRegister(User::factory()->create(), $store);
+
+    // init test data
+    $user = User::factory()->create();
+    $roleStaff = Role::where("store_id", $store->id)->where("name", UserDefaultRole::STAFF)->first();
+
+    // Action Create
+    SetupRolePermission::fromUserManagement($user, $store, $roleStaff->id);
+    // Expetect Result
+    $permission = PermissionRole::where("role_id", $roleStaff->id)->count();
+
+    expect($store)->roles->not->toBeEmpty()->toHaveCount(2);
+    expect($store->roles)->each(function ($role) {
+        expect($role)->not->toBeEmpty();
+    });
+    expect($store->roles)->each(function ($role) {
+        expect($role)->permissions->not->toBeEmpty();
+    });
+    expect($user->role)->name->toEqual($roleStaff->name)->id->toEqual($roleStaff->id);
+    expect($user->role)->permissions->toHaveCount($permission);
+});

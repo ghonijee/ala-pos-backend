@@ -145,7 +145,7 @@ class MobileAuthController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    private function validatorRegister(Request $request): Validation
+    private function validatorRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
             "fullname" => "",
