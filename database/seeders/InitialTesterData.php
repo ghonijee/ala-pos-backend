@@ -13,6 +13,7 @@ class InitialTesterData extends Seeder
      */
     public function run()
     {
+        $this->call(PermissionSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(StoreSeeder::class);
         $this->call(ProductSeeder::class);

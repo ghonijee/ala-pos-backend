@@ -6,6 +6,7 @@ use App\Models\TransactionItem;
 use App\Actions\Products\StockMovementAction;
 use App\Models\Product;
 use App\Models\Transaction;
+use Exception;
 
 class CreateTransactionItem
 {
@@ -15,9 +16,13 @@ class CreateTransactionItem
             // find product on master Data
             $product = Product::find($data['product_id']);
             // Update stock and store use stock opname
-            if ($useStockOptname) {
-                StockMovementAction::increase($product, $data['quantity']);
+            if (!$useStockOptname) {
+                return;
             }
+
+            throw_if($product->stock < $data['quantity'], new Exception("Stock product tidak cukup!"));
+
+            StockMovementAction::increase($product, $data['quantity']);
         }
 
         // Store transaction Item

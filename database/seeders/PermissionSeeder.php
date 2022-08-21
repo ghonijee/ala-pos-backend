@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info('Initial Permssion Data: Start');
+        // $this->command->info('Initial Permssion Data: Start');
         $initialData = [
             [
                 "name" => "Create transaction",
@@ -100,6 +100,6 @@ class PermissionSeeder extends Seeder
         ];
 
         Permission::insert($initialData);
-        $this->command->info('Initial Permssion Data: Finish');
+        // $this->command->info('Initial Permssion Data: Finish');
     }
 }
