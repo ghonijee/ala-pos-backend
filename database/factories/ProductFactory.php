@@ -29,6 +29,7 @@ class ProductFactory extends Factory
             "reduce_price" => null,
             "code" => $this->faker->isbn13(),
             "cost" => $cost,
+            "use_stock_opname" => 1,
             "stock" => rand(50, 100),
             "min_stock" => 5,
             "unit" => "pcs",

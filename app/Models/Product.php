@@ -11,6 +11,10 @@ class Product extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        "use_stock_opname" => 'boolean'
+    ];
+
     public function store()
     {
         return $this->belongsTo(Store::class);

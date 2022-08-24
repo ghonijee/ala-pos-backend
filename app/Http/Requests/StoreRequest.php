@@ -28,7 +28,6 @@ class StoreRequest extends FormRequest
             "name" => "required",
             "phone" => "",
             "address" => "",
-            "use_stock_opname" => "",
             "store_category_id" => "",
             // "store_category_name" => "",
             "address" => "",

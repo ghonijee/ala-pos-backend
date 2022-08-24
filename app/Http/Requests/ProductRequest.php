@@ -31,6 +31,7 @@ class ProductRequest extends FormRequest
             "reduce_price" => "",
             "code" => "",
             "cost" => "",
+            "use_stock_opname" => "",
             "stock" => "",
             "min_stock" => "",
             "unit" => "",
