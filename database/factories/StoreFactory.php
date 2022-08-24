@@ -18,7 +18,6 @@ class StoreFactory extends Factory
             "name" => $this->faker->company,
             "phone" => $this->faker->phoneNumber,
             "address" => $this->faker->address,
-            "use_stock_opname" => 1,
             "store_category_id" => null,
             "image_url" => null,
             "image_path" => null,

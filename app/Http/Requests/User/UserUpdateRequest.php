@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Exceptions\RequestValidationException;
+use Illuminate\Contracts\Validation\Validator;
 
-class UserRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,5 +31,10 @@ class UserRequest extends FormRequest
             "email" => "",
             "phone" => "required",
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new RequestValidationException($validator);
     }
 }

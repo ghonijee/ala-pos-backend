@@ -25,13 +25,13 @@ class CreateTransaction
         return $this;
     }
 
-    public function createItems(CreateTransactionItem $createTransactionItem, bool $useStockOpname = true)
+    public function createItems(CreateTransactionItem $createTransactionItem)
     {
         $this->itemAction = $createTransactionItem;
         $items = collect($this->data['products']);
 
-        $items->each(function ($item) use ($useStockOpname) {
-            $this->itemAction->execute($item, $this->transaction, $useStockOpname);
+        $items->each(function ($item) {
+            $this->itemAction->execute($item, $this->transaction);
         });
 
         return $this;

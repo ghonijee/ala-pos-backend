@@ -38,9 +38,6 @@ class TransactionController extends Controller
         try {
             DB::beginTransaction();
 
-            // Find Store
-            $store = Store::findOrFail($request->store_id);
-
             // Generate invoice number
             $invoiceNumber = $createInvoiceNumber->setup(Transaction::query(), $request->store_id);
 
@@ -52,7 +49,7 @@ class TransactionController extends Controller
 
             // Create Transaction
             $transactionModel = $createTransaction->execute($request->all())
-                ->createItems($createTransactionItem, $store->use_stock_opname)
+                ->createItems($createTransactionItem)
                 ->getTransaction();
 
             DB::commit();

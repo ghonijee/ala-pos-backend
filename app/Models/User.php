@@ -54,4 +54,24 @@ class User extends Authenticatable
     {
         return $this->hasOneThrough(Store::class, StoreUser::class, 'user_id', 'id', 'id', 'store_id');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, RoleUser::class);
+    }
+
+    public function role()
+    {
+        return $this->hasOneThrough(Role::class, RoleUser::class, "user_id", 'id', 'id', 'role_id');
+    }
+
+    public function userCrews()
+    {
+        return $this->belongsToMany(User::class, UserRelation::class, "parent_id", "child_id");
+    }
+
+    public function owner()
+    {
+        return $this->hasOneThrough(User::class, UserRelation::class, "child_id", 'id', 'id', 'parent_id');
+    }
 }

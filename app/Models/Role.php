@@ -5,18 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Role extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    protected $casts = [
-        "use_stock_opname" => 'boolean'
-    ];
-
-    public function store()
+    public function permissions()
     {
-        return $this->belongsTo(Store::class);
+        return $this->belongsToMany(Permission::class, PermissionRole::class);
     }
 }

@@ -23,6 +23,9 @@ class Controller extends BaseController
 
     protected function createResponse($status = true, $statusCode = 200)
     {
+        if ($statusCode == 0) {
+            $statusCode = 500;
+        }
         return response()->json([
             "status" => $status,
             "message" => $this->message,
