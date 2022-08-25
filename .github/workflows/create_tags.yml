@@ -6,19 +6,47 @@ on:
     types:
       - closed
 jobs:
-  build:
+  # https://github.com/marketplace/actions/semver-release
+  tags:
+    name: Create Tag by PR Semver
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: '0'
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.36.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
-        INITIAL_VERSION: 1.0.1
-        DEFAULT_BUMP: "#patch"
-        RELEASE_BRANCHES: "production"
-        PRERELEASE_SUFFIX: null
+      - name: Compute next version tag
+        id: semver
+        uses: K-Phoen/semver-release-action@master
+        with:
+          release_branch: production
+          release_strategy: none # for next bump version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Tag
+        uses: K-Phoen/semver-release-action@master
+        with:
+          release_branch: production
+          release_strategy: tag # Create tags
+          tag: "v${{ steps.semver.outputs.tag }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release #create release
+        uses: K-Phoen/semver-release-action@master
+        with:
+          release_branch: production
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     with:
+  #       fetch-depth: '0'
+  #   - name: Bump version and push tag
+  #     uses: anothrNick/github-tag-action@1.36.0
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       WITH_V: true
+  #       INITIAL_VERSION: 1.0.1
+  #       DEFAULT_BUMP: "#patch"
+  #       RELEASE_BRANCHES: "production"
+  #       PRERELEASE_SUFFIX: null
 

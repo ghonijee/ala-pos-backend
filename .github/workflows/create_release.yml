@@ -1,17 +1,14 @@
-name: Create Release
-
-on:
-  push:
-    tags:
-      - 'v*'
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create GitHub release
-        uses: Roang-zero1/github-create-release-action@v2
-        with:
-          version_regex: ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# name: Create Release
+# on:
+#   push:
+#     tags:
+#       - '*'
+# jobs:
+#   release:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Create Github Release
+#         uses: ncipollo/release-action@v1
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
 
