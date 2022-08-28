@@ -106,7 +106,7 @@ test("User can check auth status or token verification", function () {
 });
 
 test("User check auth status or token verification", function () {
-    $user = User::factory()->create();
+    // $user = User::factory()->create();
     $response = $this->getJson("api/v1/mobile/check-token");
     $body = $response->getData();
     expect($body)->message->toEqual("Unauthenticated.");

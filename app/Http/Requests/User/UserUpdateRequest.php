@@ -8,6 +8,8 @@ use Illuminate\Contracts\Validation\Validator;
 
 class UserUpdateRequest extends FormRequest
 {
+    protected $stopOnFirstFailure = true;
+
     /**
      * Determine if the user is authorized to make this request.
      *

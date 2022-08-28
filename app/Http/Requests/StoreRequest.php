@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Exceptions\RequestValidationException;
+use Illuminate\Contracts\Validation\Validator;
 
 class StoreRequest extends FormRequest
 {
+    protected $stopOnFirstFailure = true;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,5 +37,11 @@ class StoreRequest extends FormRequest
             "image_url" => "",
             "image_path" => "",
         ];
+    }
+
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new RequestValidationException($validator);
     }
 }

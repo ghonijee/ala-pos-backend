@@ -3,9 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Exceptions\RequestValidationException;
+use Illuminate\Contracts\Validation\Validator;
 
 class ProductRequest extends FormRequest
 {
+    protected $stopOnFirstFailure = true;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,5 +40,10 @@ class ProductRequest extends FormRequest
             "min_stock" => "",
             "unit" => "",
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new RequestValidationException($validator);
     }
 }
