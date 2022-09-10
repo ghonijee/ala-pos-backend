@@ -58,6 +58,5 @@ Route::prefix("v1")->name("v1.")->group(function () {
         // Transaction
         Route::get('transaction/list/group-date', [TransactionController::class, 'listGroup'])->name('transaction.list.group');
         Route::apiResource('transaction', TransactionController::class)->only(['index', 'store']);
-        // Route::post('transaction', [TransactionController::class, 'store'])->name('transaction.store');
     });
 });

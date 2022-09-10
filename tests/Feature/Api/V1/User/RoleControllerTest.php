@@ -6,6 +6,7 @@ use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
 use Database\Seeders\PermissionSeeder;
 use App\Actions\Users\SetupRolePermission;
+use App\Models\Permission;
 use App\Models\PermissionRole;
 use App\Models\RoleUser;
 
@@ -42,4 +43,21 @@ test("Can get role and permission by user ID", function () {
     expect($response)->toBeSuccess();
     expect($response->getData())->data->permissions->toHaveCount($rolePermission->count());
     expect($response->getData())->data->id->toEqual($userRole->role_id);
+});
+
+
+test("Can create new role with permission", function () {
+    $store = Store::factory()->create();
+    $permissionId = Permission::all("id")->pluck("id");
+    // dd($permissionId->count());
+    $data = [
+        "store_id" => $store->id,
+        "name" => "role_test",
+        "description" => "this is role for test",
+        "permissions" => json_encode($permissionId)
+    ];
+
+    $response = $this->postJson(route("v1.role.store"), $data);
+    expect($response)->toBeSuccess();
+    expect($response->getData())->data->name->toEqual($data['name']);
 });
