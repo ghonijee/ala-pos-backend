@@ -13,12 +13,20 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoleController extends Controller
 {
+    /**
+     * Get All role with QueryAdapter for query builder
+     */
     public function index(Request $request)
     {
         $data = QueryAdapter::for(Role::class)->get();
         return $this->responseData($data)->responseMessage("Role user list")->success();
     }
 
+    /**
+     * Find role and permission by User ID
+     * @param Request $request
+     * @param int $id
+     */
     public function userRole(Request $request, $id)
     {
         try {
@@ -34,14 +42,18 @@ class RoleController extends Controller
         }
     }
 
+    /** 
+     * Create new Role and assignment permission to Store
+    */
     public function store(CreateRoleRequest $request)
     {
         try {
-            $data = $request->only("name", "store_id", "description");
-            $role = Role::create($data);
-            $data = $request->validated();
-            $permissionId = json_decode($data['permissions']);
+            $role = Role::create($request->only("name", "store_id", "description"));
+
+            // Decode and assignment permissions to role
+            $permissionId = json_decode($request->permissions);
             $role->permissions()->sync($permissionId);
+
             return $this->responseData($role)->success();
         } catch (Exception $th) {
             return $this->responseMessage($th->getMessage())->failed($th->getCode());
