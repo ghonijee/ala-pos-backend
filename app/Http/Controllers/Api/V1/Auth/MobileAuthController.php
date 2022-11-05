@@ -150,8 +150,8 @@ class MobileAuthController extends Controller
         $validator = Validator::make($request->all(), [
             "fullname" => "",
             "user_status" => "",
-            "username" => "required",
-            "phone" => "required|numeric",
+            "username" => "required|unique:users",
+            "phone" => "required|numeric|unique:users",
             "email" => "email",
             "password" => "required",
             "device_name" => "required",
@@ -160,6 +160,8 @@ class MobileAuthController extends Controller
             'email' => 'Email tidak valid.',
             'numeric' => 'Nomer HP tidak valid.',
             "device_name" => "Nama device tidak valid",
+            "username.unique" => "Username sudah digunakan",
+            "phone.unique" => "Nomor HP sudah digunakan",
         ]);
 
         // Stop when error exist on first failure

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Auth\MobileAuthController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\StoreCategoryController;
 use App\Http\Controllers\Api\V1\StoreController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\User\PermissionController;
@@ -51,6 +52,7 @@ Route::prefix("v1")->name("v1.")->group(function () {
 
         Route::get("store/main", [StoreController::class, 'userMainStore'])->name('store.main');
         Route::apiResource('store', StoreController::class);
+        Route::apiResource('store-category', StoreCategoryController::class);
 
         Route::get('product/find/{code}', [ProductController::class, 'findCode'])->name('product.code');
         Route::apiResource('product', ProductController::class);
