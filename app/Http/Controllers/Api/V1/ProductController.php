@@ -21,6 +21,14 @@ class ProductController extends Controller
             ->success();
     }
 
+    public function count(Request $request)
+    {
+        $data = QueryAdapter::for(Product::class, $request)->paginate($request->take ?? 10);
+        $currentCountData = QueryAdapter::for(Product::class, $request)->count();
+        return $this->responseData("{$data->total()} Produk")
+            ->success();
+    }
+
     public function store(ProductRequest $request)
     {
         try {

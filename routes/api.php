@@ -55,6 +55,7 @@ Route::prefix("v1")->name("v1.")->group(function () {
         Route::apiResource('store-category', StoreCategoryController::class);
 
         Route::get('product/find/{code}', [ProductController::class, 'findCode'])->name('product.code');
+        Route::get('product/count', [ProductController::class, 'count'])->name('product.count');
         Route::apiResource('product', ProductController::class);
 
         // Transaction
